@@ -35,15 +35,12 @@ class Value : public std::enable_shared_from_this<Value> {
 
     friend std::shared_ptr<Value> operator+(const std::shared_ptr<Value>& lhs, int rhs) {
         auto other = std::make_shared<Value>(rhs);
-        auto newSet = std::set<std::shared_ptr<Value>>{lhs, other};
-        auto out = std::make_shared<Value>(lhs->data + other->data, newSet, "+");
+        return lhs + other;
+    }
 
-        out->backward = [lhs, other, out]() {
-            lhs->grad += 1.0 * out->grad;
-            other->grad += 1.0 * out->grad;
-        };
-
-        return out;
+    friend std::shared_ptr<Value> operator+(int lhs, const std::shared_ptr<Value>& rhs) {
+        auto other = std::make_shared<Value>(lhs);
+        return other + rhs;
     }
 
     friend std::shared_ptr<Value> operator*(const std::shared_ptr<Value>& lhs, const std::shared_ptr<Value>& rhs) {
@@ -60,15 +57,12 @@ class Value : public std::enable_shared_from_this<Value> {
 
     friend std::shared_ptr<Value> operator*(const std::shared_ptr<Value>& lhs, int rhs) {
         auto other = std::make_shared<Value>(rhs);
-        auto newSet = std::set<std::shared_ptr<Value>>{lhs, other};
-        auto out = std::make_shared<Value>(lhs->data * other->data, newSet, "*");
+        return lhs * other;
+    }
 
-        out->backward = [lhs, other, out]() {
-            lhs->grad += other->data * out->grad;
-            other->grad += lhs->data * out->grad;
-        };
-
-        return out;
+    friend std::shared_ptr<Value> operator*(int lhs, const std::shared_ptr<Value>& rhs) {
+        auto other = std::make_shared<Value>(lhs);
+        return other * rhs;
     }
 };
 

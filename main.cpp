@@ -4,10 +4,11 @@
 int main() {
     auto a = std::make_shared<Value>(3.0);
     auto b = a + a;
-    auto c = b * 1;
-    c->buildGrads();
+    auto c = 1 + b;
+    auto d = 4 * c;
+    d->buildGrads();
 
-    c->print();
+    d->print();
 
     return 0;
 }
