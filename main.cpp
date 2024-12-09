@@ -9,6 +9,6 @@ int main() {
     Value e = c + d;
     Value f = Value(-2.0);
     Value L = e * f;
-    std::cout << "Value of L: " << L << std::endl;
+    L.print();
     return 0;
 }
