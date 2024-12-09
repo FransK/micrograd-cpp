@@ -57,6 +57,19 @@ class Value : public std::enable_shared_from_this<Value> {
 
         return out;
     }
+
+    friend std::shared_ptr<Value> operator*(const std::shared_ptr<Value>& lhs, int rhs) {
+        auto other = std::make_shared<Value>(rhs);
+        auto newSet = std::set<std::shared_ptr<Value>>{lhs, other};
+        auto out = std::make_shared<Value>(lhs->data * other->data, newSet, "*");
+
+        out->backward = [lhs, other, out]() {
+            lhs->grad += other->data * out->grad;
+            other->grad += lhs->data * out->grad;
+        };
+
+        return out;
+    }
 };
 
 std::ostream& operator<<(std::ostream& os, const Value& value)
