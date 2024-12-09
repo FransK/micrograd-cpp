@@ -15,8 +15,14 @@ int main() {
     Value e = a * b;
     Value f = c * d;
     Value g = e + f;
-    Value h = g + 6.881373;
+    Value base = Value(6.881373);
+    Value h = g + base;
     Value L = h.tanh();
+
+    L.grad = 1.0;
+    L.backward();
+
     L.print();
+
     return 0;
 }
