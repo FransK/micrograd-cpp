@@ -15,6 +15,7 @@ class Value {
         Value operator+(const Value &rhs) const;
         Value operator*(const Value &rhs) const;
 
+        Value tanh() const;
         void print(int level) const;
 };
 
