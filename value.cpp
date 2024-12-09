@@ -36,7 +36,7 @@ std::shared_ptr<Value> Value::tanh() {
 
     out->backward = [self = shared_from_this(), t]()
     {
-        self->grad = (1 - std::pow(t, 2));
+        self->grad += (1 - std::pow(t, 2));
     };
 
     return out;
