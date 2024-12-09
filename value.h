@@ -1,5 +1,7 @@
 #include "string"
-#include "set"
+#include <set>
+#include <stack>
+#include <vector>
 #include <functional>
 #include <memory>
 
@@ -14,10 +16,10 @@ class Value : public std::enable_shared_from_this<Value> {
         Value(float data);
         Value(float data, std::set<std::shared_ptr<Value>>& children, const std::string& op);
 
-        bool operator<(const Value &rhs) const;
-
         void print(int level) const;
         std::shared_ptr<Value> tanh();
+
+        void buildGrads();
 
         friend std::shared_ptr<Value> operator+(const std::shared_ptr<Value>& lhs, const std::shared_ptr<Value>& rhs) {
             auto newSet = std::set<std::shared_ptr<Value>>{lhs, rhs};
@@ -47,4 +49,16 @@ class Value : public std::enable_shared_from_this<Value> {
 std::ostream& operator<<(std::ostream& os, const Value& value)
 {
     return os << value.data;
+}
+
+void buildTopoOrder(const std::shared_ptr<Value>& v, std::vector<std::shared_ptr<Value>>& topoOrder, std::set<Value*>& visited) {
+    if (visited.count(v.get())) {
+        return;
+    }
+    visited.insert(v.get());
+
+    for (const auto& child : v->prev) {
+        buildTopoOrder(child, topoOrder, visited);
+    }
+    topoOrder.push_back(v);
 }

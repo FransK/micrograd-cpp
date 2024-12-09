@@ -13,13 +13,7 @@ int main() {
     auto h = g + base;
     auto L = h->tanh();
 
-    L->grad = 1.0;
-    L->backward();
-    h->backward();
-    base->backward();
-    g->backward();
-    f->backward();
-    e->backward();
+    L->buildGrads();
 
     L->print();
 
