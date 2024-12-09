@@ -1,11 +1,5 @@
-#include <cmath>
 #include <iostream>
 #include "value.cpp"
-
-float derivative_tanh(float x) {
-    float tanh_x = std::tanh(x);
-    return 1.0 - tanh_x * tanh_x;
-}
 
 int main() {
     auto a = std::make_shared<Value>(-3.0);
