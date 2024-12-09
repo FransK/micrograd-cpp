@@ -9,12 +9,17 @@ int main() {
     auto e = a * b;
     auto f = c * d;
     auto g = e + f;
-    auto base = std::make_shared<Value>(6.881373);
+    auto base = std::make_shared<Value>(6.8813735870195432);
     auto h = g + base;
     auto L = h->tanh();
 
     L->grad = 1.0;
     L->backward();
+    h->backward();
+    base->backward();
+    g->backward();
+    f->backward();
+    e->backward();
 
     L->print();
 
