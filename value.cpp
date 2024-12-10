@@ -69,7 +69,8 @@ std::shared_ptr<Value> Value::pow(float exp) {
 }
 
 void Value::print(int level = 0) const {
-    std::cout << std::string(level * 2, ' ') << "Value: " << data << " Grad: " << grad << " " << op << std::endl;
+    std::cout << std::string(level * 2, ' ') << " | " << label << " - " << "Value: " 
+        << data << " Grad: " << grad << " " << op << std::endl;
 
     for (const auto& child : prev) {
         child->print(level + 1);

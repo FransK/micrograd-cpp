@@ -10,6 +10,7 @@ class Value : public std::enable_shared_from_this<Value> {
     public:
         float data;
         float grad;
+        std::string label;
         std::set<std::shared_ptr<Value>> prev;
         std::string op;
         std::function<void()> backward = []() {};
