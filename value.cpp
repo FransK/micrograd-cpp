@@ -34,9 +34,35 @@ std::shared_ptr<Value> Value::tanh() {
     float t = std::tanh(this->data);
     auto out = std::make_shared<Value>(t, newSet, "tanh");
 
-    out->backward = [self = shared_from_this(), t]()
+    out->backward = [self = shared_from_this(), t, out]()
     {
-        self->grad += (1 - std::pow(t, 2));
+        self->grad += (1 - std::pow(t, 2)) * out->grad;
+    };
+
+    return out;
+}
+
+std::shared_ptr<Value> Value::exp() {
+    auto newSet = std::set<std::shared_ptr<Value>>{shared_from_this()};
+    float e = std::exp(this->data);
+    auto out = std::make_shared<Value>(e, newSet, "exp");
+
+    out->backward = [self = shared_from_this(), out]()
+    {
+        self->grad += out->data * out->grad;
+    };
+
+    return out;
+}
+
+std::shared_ptr<Value> Value::pow(float exp) {
+    auto newSet = std::set<std::shared_ptr<Value>>{shared_from_this()};
+    float p = std::pow(this->data, exp);
+    auto out = std::make_shared<Value>(p, newSet, "^" + std::to_string(exp));
+
+    out->backward = [self = shared_from_this(), exp, out]()
+    {
+        self->grad += exp * std::pow(self->data, (exp - 1)) * out->grad;
     };
 
     return out;
