@@ -47,7 +47,7 @@ void practice_two() {
     y[0]->backward();
 
     for (const auto& param : mlp.parameters()) {
-        std::cout << "Parameter: " << param << ", Grad: " << param->grad << std::endl;
+        std::cout << "Parameter: " << param->data << ", Grad: " << param->grad << std::endl;
     }
 }
 
