@@ -26,7 +26,7 @@ Neuron::Neuron(int nin, bool nonlin) : nonlin(nonlin) {
     for (int i = 0; i < nin; ++i) {
         w.push_back(std::make_shared<Value>(random_uniform(-1.0, 1.0)));
     }
-    b = std::make_shared<Value>(0.0);
+    b = std::make_shared<Value>(random_uniform(-1.0, 1.0));
 }
 
 std::shared_ptr<Value> Neuron::operator()(const std::vector<std::shared_ptr<Value>>& x) {
