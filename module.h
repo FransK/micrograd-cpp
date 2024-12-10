@@ -19,7 +19,7 @@ public:
 // Neuron class
 class Neuron : public Module {
 public:
-    Neuron(int nin, bool nonlin = true);
+    Neuron(int nin);
 
     std::shared_ptr<Value> operator()(const std::vector<std::shared_ptr<Value>>& x);
     std::vector<std::shared_ptr<Value>> parameters() override;
@@ -28,13 +28,12 @@ public:
 private:
     std::vector<std::shared_ptr<Value>> w;
     std::shared_ptr<Value> b;
-    bool nonlin;
 };
 
 // Layer class
 class Layer : public Module {
 public:
-    Layer(int nin, int nout, bool nonlin = true);
+    Layer(int nin, int nout);
 
     std::vector<std::shared_ptr<Value>> operator()(const std::vector<std::shared_ptr<Value>>& x);
     std::vector<std::shared_ptr<Value>> parameters() override;

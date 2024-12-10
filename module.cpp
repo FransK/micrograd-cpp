@@ -22,7 +22,7 @@ std::vector<std::shared_ptr<Value>> Module::parameters() {
 }
 
 // Neuron methods
-Neuron::Neuron(int nin, bool nonlin) : nonlin(nonlin) {
+Neuron::Neuron(int nin) {
     for (int i = 0; i < nin; ++i) {
         w.push_back(std::make_shared<Value>(random_uniform(-1.0, 1.0)));
     }
@@ -33,7 +33,7 @@ std::shared_ptr<Value> Neuron::operator()(const std::vector<std::shared_ptr<Valu
     auto act = std::accumulate(w.begin(), w.end(), b, [&](const auto& acc, const auto& wi) {
         return acc + (wi * x[&wi - &w[0]]);
     });
-    return nonlin ? act->tanh() : act;
+    return act->tanh();
 }
 
 std::vector<std::shared_ptr<Value>> Neuron::parameters() {
@@ -43,13 +43,13 @@ std::vector<std::shared_ptr<Value>> Neuron::parameters() {
 }
 
 std::string Neuron::to_string() const {
-    return (nonlin ? "ReLU" : "Linear") + std::string("Neuron(") + std::to_string(w.size()) + ")";
+    return std::string("Neuron(") + std::to_string(w.size()) + ")";
 }
 
 // Layer methods
-Layer::Layer(int nin, int nout, bool nonlin) {
+Layer::Layer(int nin, int nout) {
     for (int i = 0; i < nout; ++i) {
-        neurons.emplace_back(nin, nonlin);
+        neurons.emplace_back(nin);
     }
 }
 
@@ -81,10 +81,12 @@ std::string Layer::to_string() const {
 }
 
 // MLP methods
+// nin is the number of inputs into the MLP (left-sided leaves)
+// nouts is the number of outputs from each layer
 MLP::MLP(int nin, const std::vector<int>& nouts) {
     int input_size = nin;
     for (size_t i = 0; i < nouts.size(); ++i) {
-        layers.emplace_back(input_size, nouts[i], i != nouts.size() - 1);
+        layers.emplace_back(input_size, nouts[i]);
         input_size = nouts[i];
     }
 }
