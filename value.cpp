@@ -8,6 +8,24 @@ Value::Value(float data) : data(data) {}
 Value::Value(float data, std::set<std::shared_ptr<Value>>& prev, const std::string& op)
     : data(data), prev(prev), op(op) {}
 
+
+std::ostream& operator<<(std::ostream& os, const Value& value)
+{
+    return os << value.data;
+}
+
+void buildTopoOrder(const std::shared_ptr<Value>& v, std::vector<std::shared_ptr<Value>>& topoOrder, std::set<Value*>& visited) {
+    if (visited.count(v.get())) {
+        return;
+    }
+    visited.insert(v.get());
+
+    for (const auto& child : v->prev) {
+        buildTopoOrder(child, topoOrder, visited);
+    }
+    topoOrder.push_back(v);
+}
+
 void Value::buildGrads() {
     // Topological sort
     std::vector<std::shared_ptr<Value>> topoOrder;
@@ -68,7 +86,7 @@ std::shared_ptr<Value> Value::pow(float exp) {
     return out;
 }
 
-void Value::print(int level = 0) const {
+void Value::print(int level) const {
     std::cout << std::string(level * 2, ' ') << " | " << label << " - " << "Value: " 
         << data << " Grad: " << grad << " " << op << std::endl;
 

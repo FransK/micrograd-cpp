@@ -1,3 +1,6 @@
+#ifndef VALUE_H
+#define VALUE_H
+
 #include "string"
 #include <set>
 #include <stack>
@@ -18,7 +21,7 @@ class Value : public std::enable_shared_from_this<Value> {
         Value(float data);
         Value(float data, std::set<std::shared_ptr<Value>>& children, const std::string& op);
 
-        void print(int level) const;
+        void print(int level = 0) const;
         void buildGrads();
 
         std::shared_ptr<Value> tanh();
@@ -101,19 +104,4 @@ class Value : public std::enable_shared_from_this<Value> {
     }
 };
 
-std::ostream& operator<<(std::ostream& os, const Value& value)
-{
-    return os << value.data;
-}
-
-void buildTopoOrder(const std::shared_ptr<Value>& v, std::vector<std::shared_ptr<Value>>& topoOrder, std::set<Value*>& visited) {
-    if (visited.count(v.get())) {
-        return;
-    }
-    visited.insert(v.get());
-
-    for (const auto& child : v->prev) {
-        buildTopoOrder(child, topoOrder, visited);
-    }
-    topoOrder.push_back(v);
-}
+#endif
